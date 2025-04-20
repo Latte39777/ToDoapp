@@ -1,10 +1,15 @@
-import "./index.css";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import LoginForm from "./pages/LoginForm";
+import ToDoFrom from "./pages/ToDoFrom";
 
 function App() {
   return (
-    <>
-      <p className="text-2xl text-black px-1">Hello World</p>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginForm />} />
+        <Route path="/todo" element={<ToDoFrom />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
