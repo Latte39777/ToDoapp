@@ -1,11 +1,11 @@
+import { Timestamp } from "firebase/firestore";
+
 export type Todo = {
   id: string;
   title: string;
-  uid: string;
+  description: string;
+  completed: boolean;
+  userid: string;
+  createAt: Timestamp;
+  updatedAt: Timestamp;
 };
-
-// export type AuthUser = {
-//   currentUser: User | null;
-//   login?: () => Promise<void>;
-//   logout?: () => Promise<void>;
-// };

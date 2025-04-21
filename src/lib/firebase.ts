@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  Timestamp,
+} from "firebase/firestore";
+import { Todo } from "../types/todo";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -12,10 +18,21 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
 
-const provider = new GoogleAuthProvider();
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { auth, provider, db };
+export { auth, db };
+
+export const addTodo = async (todo: Todo) => {
+  try {
+    const docRef = await addDoc(collection(db, "todos"), {
+      ...todo,
+      createdAt: Timestamp.fromDate(new Date()),
+      updatedAt: Timestamp.fromDate(new Date()),
+    });
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
