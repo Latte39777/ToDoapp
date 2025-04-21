@@ -1,9 +1,12 @@
-const ToDoFrom = () => {
+import { useParams } from "react-router-dom";
+
+const TodoPage = () => {
+  const { uid } = useParams();
   return (
-    <div>
-      <h1>To Do From</h1>
-      <p>This is the To Do From page.</p>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">ようこそ、ユーザー {uid} さん</h1>
     </div>
   );
 };
-export default ToDoFrom;
+
+export default TodoPage;

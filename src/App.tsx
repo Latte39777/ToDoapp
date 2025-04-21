@@ -1,15 +1,15 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginForm from "./pages/LoginForm";
-import ToDoFrom from "./pages/ToDoFrom";
+import ToDoFrom from "./pages/ToDoFrom"; // 作る！
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<LoginForm />} />
-        <Route path="/todo" element={<ToDoFrom />} />
+        <Route path="/user/:uid/todo" element={<ToDoFrom />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 

@@ -1,30 +1,24 @@
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../lib/firebase";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../../lib/firebase";
 
 const Login = () => {
   const navigate = useNavigate();
-
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        console.log("ログイン成功:", user);
-        navigate("/todo");
-      })
-      .catch((error) => {
-        console.error("ログイン失敗:", error);
-      });
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const uid = result.user.uid;
+      console.log("ログイン成功:", uid);
+      navigate(`/user/${uid}/todo`);
+    } catch (error) {
+      console.error("ログイン失敗:", error);
+    }
   };
 
   return (
-    <button
-      className="bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
-      type="button"
-      onClick={handleLogin}
-    >
-      Googleでログイン
+    <button onClick={handleLogin} className="bg-green-300">
+      Login
     </button>
   );
 };
