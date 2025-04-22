@@ -1,48 +1,58 @@
-import React, { useState } from "react";
-import { Todo } from "../types/todo";
-import { Timestamp } from "firebase/firestore";
-import { addTodo, auth } from "../lib/firebase";
+import { useState } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../lib/firebase";
 
 const TodoForm = () => {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-
-  const user = auth.currentUser;
-
-  if (user) {
-    const uid = user.uid;
-  }
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const user = auth.currentUser || null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newTodo: Todo = {
-      id: "",
-      title: title,
-      description: description,
-      completed: false,
-      createAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
 
-    await addTodo(newTodo);
-    setTitle("");
-    setDescription("");
+    if (!user) {
+      alert("ログインしてください");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "todos"), {
+        userid: user.uid,
+        title,
+        description,
+        completed: false,
+        createAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+
+      // フォームをリセット
+      setTitle("");
+      setDescription("");
+    } catch (error) {
+      console.error("ToDoの追加に失敗しました:", error);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-4">
       <input
-        type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
+        placeholder="タイトル"
+        className="w-full rounded-md border-2 border-black p-2"
       />
       <textarea
-        value={description} // 本文（詳細）の入力フィールド
+        value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="Description"
+        placeholder="説明"
+        className="w-full rounded-md border-2 border-black p-2"
       />
-      <button type="submit">Add Todo</button>
+      <button
+        type="submit"
+        className="rounded-md bg-blue-500 px-4 py-2 text-white"
+      >
+        追加
+      </button>
     </form>
   );
 };

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginForm from "./pages/LoginForm";
-import ToDoFrom from "./pages/ToDoFrom"; // 作る！
+import ToDoFrom from "./pages/ToDoFrom";
 
 function App() {
   return (
