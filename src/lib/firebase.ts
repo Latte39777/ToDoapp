@@ -1,12 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {
-  addDoc,
-  collection,
-  getFirestore,
-  Timestamp,
-} from "firebase/firestore";
-import { Todo } from "../types/todo";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -23,16 +17,3 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 export { auth, db };
-
-export const addTodo = async (todo: Todo) => {
-  try {
-    const docRef = await addDoc(collection(db, "todos"), {
-      ...todo,
-      createdAt: Timestamp.fromDate(new Date()),
-      updatedAt: Timestamp.fromDate(new Date()),
-    });
-    console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
-};

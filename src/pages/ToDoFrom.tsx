@@ -1,60 +1,41 @@
-import { useState } from "react";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../lib/firebase";
+import { useEffect, useState } from "react";
+import fetchTodos from "../features/todo/read";
+import { Todo } from "../types/todo";
+import { useParams } from "react-router-dom";
 
-const TodoForm = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const user = auth.currentUser || null;
+const ToDoForm = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const { uid } = useParams<{ uid: string }>();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    const getTodos = async () => {
+      if (!uid) {
+        console.error("User ID is not defined");
+        return;
+      }
+      const data = await fetchTodos(uid);
+      console.log("Fetched todos:", data); // ←ここでログ確認！
+      setTodos(data);
+    };
 
-    if (!user) {
-      alert("ログインしてください");
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, "todos"), {
-        userid: user.uid,
-        title,
-        description,
-        completed: false,
-        createAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
-
-      // フォームをリセット
-      setTitle("");
-      setDescription("");
-    } catch (error) {
-      console.error("ToDoの追加に失敗しました:", error);
-    }
-  };
+    getTodos();
+  }, [uid]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="タイトル"
-        className="w-full rounded-md border-2 border-black p-2"
-      />
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="説明"
-        className="w-full rounded-md border-2 border-black p-2"
-      />
-      <button
-        type="submit"
-        className="rounded-md bg-blue-500 px-4 py-2 text-white"
-      >
-        追加
-      </button>
-    </form>
+    <div>
+      <h1>To Do Form</h1>
+      <form>
+        <input type="text" placeholder="Enter a task" />
+        <button type="submit">Add Task</button>
+      </form>
+
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
-export default TodoForm;
+export default ToDoForm;
