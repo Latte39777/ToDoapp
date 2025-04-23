@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
-import fetchTodos from "../features/todo/read";
+import { collection, getDocs } from "firebase/firestore";
 import { Todo } from "../types/todo";
-import { useParams } from "react-router-dom";
+import { db } from "../lib/firebase";
 
 const ToDoForm = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const { uid } = useParams<{ uid: string }>();
 
   useEffect(() => {
-    const getTodos = async () => {
-      if (!uid) {
-        console.error("User ID is not defined");
-        return;
-      }
-      const data = await fetchTodos(uid);
-      console.log("Fetched todos:", data); // ←ここでログ確認！
-      setTodos(data);
+    const fetchTodos = async () => {
+      const querySnapshot = await getDocs(collection(db, "todos"));
+      const todosData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Todo[];
+      console.log(todosData);
+      setTodos(todosData);
     };
 
-    getTodos();
-  }, [uid]);
+    fetchTodos();
+  }, []);
 
   return (
     <div>
@@ -31,7 +30,11 @@ const ToDoForm = () => {
 
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.title}</li>
+          <li key={todo.id}>
+            <p>{todo.title}</p>
+            <p>{todo.description}</p>
+            <p>{todo.createAt.toDate().toLocaleString()}</p>
+          </li>
         ))}
       </ul>
     </div>
