@@ -9,7 +9,7 @@ const Login = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const uid = result.user.uid;
-      console.log("ログイン成功:", uid);
+      console.log("ログイン成功 ログイン中のユーザーUID:", uid);
       navigate(`/user/${uid}/todo`);
     } catch (error) {
       console.error("ログイン失敗:", error);

@@ -1,23 +1,43 @@
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { auth, db } from "../lib/firebase";
 import { Todo } from "../types/todo";
-import { db } from "../lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const ToDoForm = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      const querySnapshot = await getDocs(collection(db, "todos"));
-      const todosData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Todo[];
-      console.log(todosData);
-      setTodos(todosData);
-    };
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const q = query(
+          collection(db, "todos"),
+          where("userid", "==", user.uid)
+        );
 
-    fetchTodos();
+        console.log("bbb", user.uid);
+
+        const snapshot = await getDocs(q);
+
+        console.log("ccc", snapshot.docs);
+
+        snapshot.docs.forEach((doc) => {
+          console.log("1:doc.data():", doc.data());
+        });
+
+        setTodos(
+          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Todo)
+        );
+
+        snapshot.docs.forEach((doc) => {
+          console.log("2:doc.data():", doc.data());
+        });
+      } else {
+        setTodos([]);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (

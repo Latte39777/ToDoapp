@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export type Todo = {
+type Todo = {
   id: string;
   title: string;
   description: string;
@@ -9,3 +9,5 @@ export type Todo = {
   createAt: Timestamp;
   updatedAt: Timestamp;
 };
+
+export type { Todo };
