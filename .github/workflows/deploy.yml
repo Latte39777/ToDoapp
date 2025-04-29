@@ -56,6 +56,6 @@ jobs:
       - name: Deploy to Firebase
         uses: joinflux/firebase-tools@v9.16.0
         with:
-          args: deploy todoproject-dbfb7 --only hosting
+          args: deploy --project=todoproject-dbfb7 --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
