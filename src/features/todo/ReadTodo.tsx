@@ -25,6 +25,10 @@ const ReadTodo = () => {
     return () => unsubscribe();
   }, []);
 
+  const handleAddTodo = (newTodo: Todo) => {
+    setTodos((prev) => [...prev, newTodo]);
+  };
+
   return (
     <ul>
       {todos.map((todo) => (

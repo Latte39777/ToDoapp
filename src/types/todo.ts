@@ -10,4 +10,8 @@ type Todo = {
   updatedAt: Timestamp;
 };
 
-export type { Todo };
+type onAdd = {
+  onAdd: (todo: Todo) => void;
+};
+
+export type { Todo, onAdd };

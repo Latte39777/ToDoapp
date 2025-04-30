@@ -1,9 +1,14 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { Todo } from "../../types/todo";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  Timestamp,
+} from "firebase/firestore";
+import { Todo, onAdd } from "../../types/todo";
 import { auth, db } from "../../lib/firebase";
 import { useState } from "react";
 
-const PostTodo = () => {
+const PostTodo = ({ onAdd }: onAdd) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -14,14 +19,28 @@ const PostTodo = () => {
     try {
       const user = auth.currentUser;
       if (user) {
-        await addDoc(collection(db, "todos"), {
-          title: title,
-          description: description,
+        const docRef = await addDoc(collection(db, "todos"), {
+          title,
+          description,
           completed: false,
           userid: user.uid,
           createAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
-        } as Todo);
+        });
+
+        const now = Timestamp.fromDate(new Date()); // 仮の値として現在時刻を使用
+
+        const newTodo: Todo = {
+          id: docRef.id,
+          title,
+          description,
+          completed: false,
+          userid: user.uid,
+          createAt: now,
+          updatedAt: now,
+        };
+
+        onAdd(newTodo);
         setTitle("");
         setDescription("");
       }
