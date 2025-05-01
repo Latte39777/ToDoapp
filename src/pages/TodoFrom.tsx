@@ -30,11 +30,7 @@ const TodoFrom = () => {
   }, []);
 
   const handleAddTodo = (newTodo: Todo) => {
-    setTodos((prev) =>
-      [newTodo, ...prev].sort(
-        (a, b) => b.createAt.toMillis() - a.createAt.toMillis()
-      )
-    );
+    setTodos((prev) => [newTodo, ...prev]);
   };
 
   return (
