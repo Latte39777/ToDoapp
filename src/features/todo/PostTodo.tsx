@@ -28,7 +28,7 @@ const PostTodo = ({ onAdd }: onAdd) => {
           updatedAt: serverTimestamp(),
         });
 
-        const now = Timestamp.fromDate(new Date()); // 仮の値として現在時刻を使用
+        const now = Timestamp.fromDate(new Date());
 
         const newTodo: Todo = {
           id: docRef.id,
