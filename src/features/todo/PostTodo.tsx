@@ -6,46 +6,42 @@ import { useState } from "react";
 const PostTodo = ({ onAdd }: onAdd) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !description) return;
 
-    alert("submit開始");
-
-    const user = auth.currentUser;
-    alert("user取得");
-
-    if (!user) {
-      alert("❌ ユーザー取得失敗");
-      return;
-    }
-
     try {
-      const now = Timestamp.fromDate(new Date());
+      const user = auth.currentUser;
+      if (user) {
+        const now = Timestamp.fromDate(new Date());
 
-      const docRef = await addDoc(collection(db, "todos"), {
-        title,
-        description,
-        completed: false,
-        userid: user.uid,
-        createAt: now,
-        updatedAt: now,
-      });
+        const docRef = await addDoc(collection(db, "todos"), {
+          title,
+          description,
+          completed: false,
+          userid: user.uid,
+          createAt: now,
+          updatedAt: now,
+        });
 
-      const newTodo: Todo = {
-        id: docRef.id,
-        title,
-        description,
-        completed: false,
-        userid: user.uid,
-        createAt: now,
-        updatedAt: now,
-      };
-      alert("🎉 add todo");
+        const newTodo: Todo = {
+          id: docRef.id,
+          title,
+          description,
+          completed: false,
+          userid: user.uid,
+          createAt: now,
+          updatedAt: now,
+        };
 
-      onAdd(newTodo);
-      setTitle("");
-      setDescription("");
+        console.log("add todo");
+        alert("add todo");
+
+        onAdd(newTodo);
+        setTitle("");
+        setDescription("");
+      }
     } catch (error) {
       console.error("Error adding todo:", error);
     }
@@ -70,11 +66,7 @@ const PostTodo = ({ onAdd }: onAdd) => {
         onChange={(e) => setDescription(e.target.value)}
         required
       />
-      <button
-        className="border-2 border-cyan-400"
-        type="submit"
-        onClick={() => alert("🧪 ボタン押された")}
-      >
+      <button className="border-2 border-cyan-400" type="submit">
         Add Todo
       </button>
     </form>

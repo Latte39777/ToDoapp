@@ -19,7 +19,6 @@ const TodoFrom = () => {
         );
         // console.log("q", q); // q はあくまでもどう取得するか
         const snapshot = await getDocs(q);
-        console.log("snapshot", snapshot);
         const todoList = snapshot.docs.map(
           (doc) => ({ ...doc.data(), id: doc.id }) as Todo
         );
@@ -34,8 +33,8 @@ const TodoFrom = () => {
 
   const handleAddTodo = (newTodo: Todo) => {
     console.log("add task");
-    alert("add task");
     setTodos((prev) => [newTodo, ...prev]);
+    alert("add task");
   };
 
   return (
