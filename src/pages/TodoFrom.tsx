@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import PostTodo from "../features/todo/PostTodo";
 import ReadTodo from "../features/todo/ReadTodo";
@@ -17,10 +17,13 @@ const TodoFrom = () => {
           where("userid", "==", user.uid),
           orderBy("createAt", "desc")
         );
+        // console.log("q", q); // q はあくまでもどう取得するか
         const snapshot = await getDocs(q);
+        console.log("snapshot", snapshot);
         const todoList = snapshot.docs.map(
           (doc) => ({ ...doc.data(), id: doc.id }) as Todo
         );
+        console.log("todoList", todoList);
         setTodos(todoList);
       } else {
         setTodos([]);
@@ -30,6 +33,8 @@ const TodoFrom = () => {
   }, []);
 
   const handleAddTodo = (newTodo: Todo) => {
+    console.log("add task");
+    alert("add task");
     setTodos((prev) => [newTodo, ...prev]);
   };
 
