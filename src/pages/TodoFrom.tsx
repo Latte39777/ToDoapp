@@ -37,11 +37,28 @@ const TodoFrom = () => {
     alert("add task");
   };
 
+  const handleDeleteTodo = (id: string) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+
+  const handleEditTodo = (id: string, updatedTodo: Todo) => {
+    console.log("update task 1");
+    setTodos((prev) =>
+      prev.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo))
+    );
+    console.log(todos.filter((todo) => todo.id === id));
+    console.log("update task");
+  };
+
   return (
     <>
       <h1>Todo Form test</h1>
       <PostTodo onAdd={handleAddTodo} />
-      <ReadTodo todos={todos} />
+      <ReadTodo
+        todos={todos}
+        onDelete={handleDeleteTodo}
+        onEdit={handleEditTodo}
+      ></ReadTodo>
     </>
   );
 };

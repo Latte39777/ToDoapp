@@ -14,4 +14,8 @@ type onAdd = {
   onAdd: (todo: Todo) => void;
 };
 
-export type { Todo, onAdd };
+type onDelete = {
+  onDelete?: (id: string) => void;
+};
+
+export type { Todo, onAdd, onDelete };

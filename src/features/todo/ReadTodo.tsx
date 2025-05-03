@@ -1,17 +1,42 @@
+import { useState } from "react";
 import { Todo } from "../../types/todo";
+import DeleteTodo from "./DeleteTodo";
+import EditTodo from "./EditTodo";
 
 type Props = {
   todos: Todo[];
+  onDelete?: (id: string) => void;
+  onEdit?: (id: string, updatedTodo: Todo) => void;
 };
 
-const ReadTodo = ({ todos }: Props) => {
+const ReadTodo = ({ todos, onDelete, onEdit }: Props) => {
+  const [editingId, setEditingId] = useState<string | null>(null);
+
   return (
     <ul>
       {todos.map((todo) => (
-        <li className="border-2 border-cyan-400" key={todo.id}>
-          <p>{todo.title}</p>
-          <p>{todo.description}</p>
-          <p>{todo.createAt.toDate().toLocaleString()}</p>
+        <li className="mb-2 border-2 border-cyan-400 p-2" key={todo.id}>
+          {editingId === todo.id ? (
+            <EditTodo
+              id={todo.id}
+              currentTitle={todo.title}
+              currentDescription={todo.description}
+              onEdit={(id, updatedTodo) => {
+                if (onEdit) {
+                  onEdit(id, updatedTodo); // ← TodoForm の handleEditTodo を呼ぶ
+                }
+                setEditingId(null); // 編集モード解除
+              }}
+            />
+          ) : (
+            <>
+              <p>{todo.title}</p>
+              <p>{todo.description}</p>
+              <p>{todo.createAt.toDate().toLocaleString()}</p>
+              <button onClick={() => setEditingId(todo.id)}>編集</button>
+              <DeleteTodo id={todo.id} onDelete={onDelete} />
+            </>
+          )}
         </li>
       ))}
     </ul>
