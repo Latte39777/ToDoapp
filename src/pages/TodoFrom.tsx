@@ -42,12 +42,10 @@ const TodoFrom = () => {
   };
 
   const handleEditTodo = (id: string, updatedTodo: Todo) => {
-    console.log("update task 1");
     setTodos((prev) =>
       prev.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo))
     );
     console.log(todos.filter((todo) => todo.id === id));
-    console.log("update task");
   };
 
   return (

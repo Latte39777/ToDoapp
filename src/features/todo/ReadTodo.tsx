@@ -23,9 +23,9 @@ const ReadTodo = ({ todos, onDelete, onEdit }: Props) => {
               currentDescription={todo.description}
               onEdit={(id, updatedTodo) => {
                 if (onEdit) {
-                  onEdit(id, updatedTodo); // ← TodoForm の handleEditTodo を呼ぶ
+                  onEdit(id, updatedTodo);
                 }
-                setEditingId(null); // 編集モード解除
+                setEditingId(null);
               }}
             />
           ) : (
