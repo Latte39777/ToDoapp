@@ -20,9 +20,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set Firebase Service Account
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-
       - name: Build project
         run: npm run build
 
