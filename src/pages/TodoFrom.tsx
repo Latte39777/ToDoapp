@@ -45,7 +45,6 @@ const TodoFrom = () => {
     setTodos((prev) =>
       prev.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo))
     );
-    console.log(todos.filter((todo) => todo.id === id));
   };
 
   return (
