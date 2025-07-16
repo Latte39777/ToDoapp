@@ -1,0 +1,41 @@
+# ワークフローの名前
+name: Deploy to Firebase Hosting
+
+# ワークフローが実行されるタイミング (mainブランチにプッシュされた時)
+on:
+  push:
+    branches:
+      - main # あなたのメインブランチが'master'の場合は書き換えてください
+
+jobs:
+  build_and_deploy:
+    # 実行環境
+    runs-on: ubuntu-latest
+    steps:
+      # ステップ1: リポジトリのコードをチェックアウトする
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ステップ2: Node.jsの環境を設定する
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18" # あなたのプロジェクトに合わせたバージョンを指定
+
+      # ステップ3: 依存パッケージをインストールする (node_modulesを生成)
+      - name: Install dependencies
+        run: npm install
+
+      # ステップ4: プロジェクトをビルドする (distフォルダを生成)
+      - name: Build project
+        run: npm run build
+
+      # ステップ5: Firebaseにデプロイする
+      - name: Deploy to Firebase Hosting
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          # GitHubリポジトリのSecretsに設定したトークンとIDを読み込む
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: todoproject-dbfb7
