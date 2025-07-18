@@ -20,7 +20,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginForm />} />
+        <Route
+          path="/"
+          element={
+            user ? <Navigate to={`/user/${user.uid}/todo`} /> : <LoginForm />
+          }
+        />
         <Route
           path="/user/:uid/todo"
           element={user ? <TodoForm /> : <Navigate to="/" />}
