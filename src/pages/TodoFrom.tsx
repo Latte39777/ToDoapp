@@ -5,6 +5,8 @@ import PostTodo from "../features/todo/PostTodo";
 import ReadTodo from "../features/todo/ReadTodo";
 import { Todo } from "../types/todo";
 import { auth, db } from "../lib/firebase";
+import LogoutButton from "../components/LogoutButton";
+import AnimatedCircles from "../components/AnimationCircles";
 
 const TodoFrom = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -41,7 +43,7 @@ const TodoFrom = () => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
-  const handleEditTodo = (id: string, updatedTodo: Todo) => {
+  const handleEditTodo = (id: string, updatedTodo: Partial<Todo>) => {
     setTodos((prev) =>
       prev.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo))
     );
@@ -49,13 +51,23 @@ const TodoFrom = () => {
 
   return (
     <>
-      <h1>Todo Form test</h1>
-      <PostTodo onAdd={handleAddTodo} />
-      <ReadTodo
-        todos={todos}
-        onDelete={handleDeleteTodo}
-        onEdit={handleEditTodo}
-      ></ReadTodo>
+      <div className="fixed inset-0 z-0 bg-blue-400">
+        <div className="blur-xs">
+          <AnimatedCircles count={30} />
+        </div>
+      </div>
+
+      <div className="relative">
+        <div className="d-flex relative z-10 flex-col items-center justify-center">
+          <LogoutButton />
+          <PostTodo onAdd={handleAddTodo} />
+          <ReadTodo
+            todos={todos}
+            onDelete={handleDeleteTodo}
+            onEdit={handleEditTodo}
+          ></ReadTodo>
+        </div>
+      </div>
     </>
   );
 };

@@ -48,28 +48,39 @@ const PostTodo = ({ onAdd }: onAdd) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Post Todo</h2>
-      <input
-        className="border-2 border-cyan-400"
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
-      <input
-        className="border-2 border-cyan-400"
-        type="text"
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        required
-      />
-      <button className="border-2 border-cyan-400" type="submit">
-        Add Todo
-      </button>
-    </form>
+    <>
+      <div className="w-full p-8">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div>
+            <input
+              id="title"
+              className="w-full rounded-md bg-gray-200 p-3 shadow-sm backdrop-blur-sm transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              type="text"
+              placeholder="Todoのタイトル"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <textarea
+              id="description"
+              className="h-24 w-full rounded-md bg-gray-200 p-3 text-base shadow-sm backdrop-blur-sm transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="詳細な内容"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
+          <button
+            className="w-full rounded-md bg-sky-500 px-4 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+            type="submit"
+          >
+            追加
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
